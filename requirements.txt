@@ -6,3 +6,5 @@ streamlit
 openai
 huggingface_hub
 sentence-transformers
+langchain-community
+
