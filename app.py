@@ -1,8 +1,6 @@
 import os
 import requests
 from langchain.agents import initialize_agent, Tool
-from langchain_community.chat_models import ChatOpenAI
-
 from langchain.chat_models import ChatOpenAI
 from langchain.vectorstores import FAISS
 from langchain.embeddings import HuggingFaceEmbeddings
@@ -58,11 +56,14 @@ documents = recursive_loader('https://www.rekhta.org/')
 
 # Create embeddings using Hugging Face's model
 embedding_model = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
-doc_embeddings = [embedding_model.embed_text(doc) for doc in documents]
+doc_embeddings = embedding_model.embed_documents(documents)  # Use embed_documents instead of embed_text
 
 # Create a vector store using FAISS
-index = faiss.IndexFlatL2(len(doc_embeddings[0]))
-faiss_index = FAISS.from_documents(documents, embedding_model)
+index = faiss.IndexFlatL2(len(doc_embeddings[0]))  # Initialize FAISS index with the embedding size
+index.add(np.array(doc_embeddings))  # Add embeddings to the index
+
+# Create a FAISS vector store
+faiss_index = FAISS(embedding_model, index)  # Create FAISS vector store with embeddings
 
 # Set up a Chat model
 chat_model = ChatOpenAI(temperature=0.5)
@@ -81,7 +82,7 @@ if user_input:
     context = "\n".join([result.page_content for result in results])
 
     # Generate the response based on the context
-    agent = initialize_agent([Tool(name="Rekhta Knowledge Base", func=context, description="Retrieve data from Rekhta." )], chat_model, verbose=True)
+    agent = initialize_agent([Tool(name="Rekhta Knowledge Base", func=context, description="Retrieve data from Rekhta.")], chat_model, verbose=True)
     response = agent.run(user_input)
     
     st.write(response)
