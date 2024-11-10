@@ -1,10 +1,8 @@
 requests
-beautifulsoup4
-faiss-cpu
 langchain
+faiss-cpu
 streamlit
-openai
-huggingface_hub
-sentence-transformers
 langchain-community
+beautifulsoup4
+numpy
 
