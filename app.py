@@ -1,8 +1,7 @@
 import os
 import requests
-import numpy as np  # Ensure numpy is imported
+import numpy as np
 from langchain.agents import initialize_agent, Tool
-from langchain.chat_models import ChatOpenAI
 from langchain.vectorstores import FAISS
 from langchain.embeddings import HuggingFaceEmbeddings
 from langchain.prompts import PromptTemplate
@@ -10,6 +9,10 @@ import streamlit as st
 import faiss
 from bs4 import BeautifulSoup
 import re
+
+# Retrieve the GIMNI API key from Streamlit secrets
+gimni_api_key = st.secrets["gimni_api_key"]
+gimni_api_url = "AIzaSyBZ-MtjPu2rtQhUyruMphzuwL87_lKuDRk"  # Replace this with your GIMNI API URL
 
 # Function to extract text from a webpage
 def extract_text_from_html(url):
@@ -69,8 +72,21 @@ index_to_docstore_id = {i: str(i) for i in range(len(docstore))}  # Map FAISS in
 
 faiss_index = FAISS(embedding_model, index, docstore, index_to_docstore_id)  # Initialize FAISS with necessary parameters
 
-# Set up a Chat model
-chat_model = ChatOpenAI(temperature=0.5)
+# Function to query the GIMNI API
+def query_gimni_api(question, context):
+    headers = {
+        "Authorization": f"Bearer {gimni_api_key}",
+        "Content-Type": "application/json"
+    }
+    payload = {
+        "question": question,
+        "context": context
+    }
+    response = requests.post(gimni_api_url, headers=headers, json=payload)
+    if response.status_code == 200:
+        return response.json().get("answer", "Sorry, I couldn't find an answer.")
+    else:
+        return "Error querying GIMNI API."
 
 # Define a prompt template for the RAG app
 prompt_template = "You are an AI chatbot trained on content from Rekhta. Answer the following question: {question}"
@@ -85,12 +101,15 @@ if user_input:
     results = faiss_index.similarity_search(user_input, k=3)
     context = "\n".join([result.page_content for result in results])
 
-    # Generate the response based on the context
-    agent = initialize_agent([Tool(name="Rekhta Knowledge Base", func=context, description="Retrieve data from Rekhta.")], chat_model, verbose=True)
-    response = agent.run(user_input)
+    # Generate the response based on the context using GIMNI API
+    response = query_gimni_api(user_input, context)
     
     st.write(response)
 
+  
+
+
+   
 
           
 
