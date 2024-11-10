@@ -12,7 +12,7 @@ import re
 
 # Retrieve the GIMNI API key from Streamlit secrets
 gimni_api_key = st.secrets["gimni_api_key"]
-gimni_api_url = "AIzaSyBZ-MtjPu2rtQhUyruMphzuwL87_lKuDRk"  # Replace this with your GIMNI API URL
+gimni_api_key = "AIzaSyBZ-MtjPu2rtQhUyruMphzuwL87_lKuDRk"  # Replace this with your GIMNI API URL
 
 # Function to extract text from a webpage
 def extract_text_from_html(url):
