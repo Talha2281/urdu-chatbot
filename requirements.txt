@@ -1,8 +1,8 @@
-requests
-langchain
-faiss-cpu
 streamlit
-langchain-community
-beautifulsoup4
+requests
 numpy
+faiss-cpu
+sentence-transformers
+langchain
+beautifulsoup4
 
