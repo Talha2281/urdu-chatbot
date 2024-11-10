@@ -10,9 +10,9 @@ import faiss
 from bs4 import BeautifulSoup
 import re
 
-# Retrieve the GIMNI API key from Streamlit secrets
-gimni_api_key = st.secrets["gimni_api_key"]
-gimni_api_url = "https://api.gimni.com/v1/ask"  # Replace this with your GIMNI API URL
+# GIMNI API key and URL for testing purposes
+gimni_api_key = "AIzaSyBZ-MtjPu2rtQhUyruMphzuwL87_lKuDRk"  # Directly embedding for testing
+gimni_api_url = "https://api.gimni.com/v1/ask"  # Replace with the actual GIMNI API URL if different
 
 # Function to extract text from a webpage
 def extract_text_from_html(url):
@@ -105,6 +105,11 @@ if user_input:
     response = query_gimni_api(user_input, context)
     
     st.write(response)
+
+      
+        
+
+
 
 
 
