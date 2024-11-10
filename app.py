@@ -1,6 +1,6 @@
 import os
-import numpy as np
 import requests
+import numpy as np  # Ensure numpy is imported
 from langchain.agents import initialize_agent, Tool
 from langchain.chat_models import ChatOpenAI
 from langchain.vectorstores import FAISS
@@ -63,8 +63,11 @@ doc_embeddings = embedding_model.embed_documents(documents)  # Use embed_documen
 index = faiss.IndexFlatL2(len(doc_embeddings[0]))  # Initialize FAISS index with the embedding size
 index.add(np.array(doc_embeddings))  # Add embeddings to the index
 
-# Create a FAISS vector store
-faiss_index = FAISS(embedding_model, index)  # Create FAISS vector store with embeddings
+# Create a FAISS vector store with docstore and index_to_docstore_id
+docstore = {i: doc for i, doc in enumerate(documents)}  # Map each document to an ID
+index_to_docstore_id = {i: str(i) for i in range(len(docstore))}  # Map FAISS index to docstore ID
+
+faiss_index = FAISS(embedding_model, index, docstore, index_to_docstore_id)  # Initialize FAISS with necessary parameters
 
 # Set up a Chat model
 chat_model = ChatOpenAI(temperature=0.5)
@@ -87,3 +90,7 @@ if user_input:
     response = agent.run(user_input)
     
     st.write(response)
+
+
+          
+
