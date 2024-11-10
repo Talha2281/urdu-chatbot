@@ -11,7 +11,7 @@ from bs4 import BeautifulSoup
 import re
 
 # GIMNI API key and URL for testing purposes
-gimni_api_key = "AIzaSyBZ-MtjPu2rtQhUyruMphzuwL87_lKuDRk"  # Directly embedding for testing
+gimni_api_key = ""  # Directly embedding for testing
 gimni_api_url = "https://api.gimni.com/v1/ask"  # Replace with the actual GIMNI API URL if different
 
 # Function to extract text from a webpage
