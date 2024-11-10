@@ -1,4 +1,5 @@
 import os
+import numpy as np
 import requests
 from langchain.agents import initialize_agent, Tool
 from langchain.chat_models import ChatOpenAI
