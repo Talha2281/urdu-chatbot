@@ -1,6 +1,8 @@
 import os
 import requests
 from langchain.agents import initialize_agent, Tool
+from langchain_community.chat_models import ChatOpenAI
+
 from langchain.chat_models import ChatOpenAI
 from langchain.vectorstores import FAISS
 from langchain.embeddings import HuggingFaceEmbeddings
